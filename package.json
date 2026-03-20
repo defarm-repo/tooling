@@ -1,0 +1,12 @@
+{
+  "name": "defarm-tooling",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @defarm/sdk && npm run build --workspace @defarm/cli",
+    "check": "npm run check --workspace @defarm/sdk && npm run check --workspace @defarm/cli",
+    "test": "npm test --workspace @defarm/sdk && npm test --workspace @defarm/cli"
+  }
+}
