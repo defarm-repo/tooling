@@ -1,6 +1,6 @@
 {
   "name": "@defarm/sdk",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "TypeScript SDK for DeFarm gateway integrations",
   "license": "MIT",
   "keywords": [

@@ -9,7 +9,7 @@ import { disclosuresCommands } from "./commands/disclosures.js";
 import { receiptsCommands } from "./commands/receipts.js";
 import { notifyIfUpdateAvailable } from "./update-check.js";
 
-const CLI_VERSION = "0.1.7";
+const CLI_VERSION = "0.1.10";
 
 const program = new Command();
 program

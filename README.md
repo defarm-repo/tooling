@@ -1,23 +1,63 @@
 # DeFarm Tooling
 
-Public-facing source repository for DeFarm developer tooling.
+Public developer tooling for the DeFarm platform.
+Agricultural traceability anchored on Stellar.
 
-This workspace is intentionally narrow:
-- `packages/sdk`: TypeScript SDK for DeFarm gateway integrations.
-- `packages/cli`: CLI built on top of the SDK.
+This repository was recently extracted from a larger private DeFarm product monorepo and is being progressively opened in public.
 
-What is included:
-- source code
-- minimal tests with mocked servers
-- package manifests and TypeScript configs
+## Packages
 
-What is intentionally excluded:
-- backend services
-- internal docs
-- private assistant/config files
-- live E2E scripts and operational secrets
+| Package | Version | Description |
+|---|---:|---|
+| `@defarm/sdk` | `0.1.5` | TypeScript SDK for the DeFarm gateway |
+| `@defarm/cli` | `0.1.10` | CLI built on top of the SDK |
 
-## Workspace
+## Quick Install
+
+```bash
+npm install -g @defarm/cli
+defarm --version
+# 0.1.10
+```
+
+## Quick Start (5 minutes)
+
+```bash
+# 1. Login
+defarm auth login --email <email> --password <password>
+
+# 2. List your circuits
+defarm circuits list
+
+# 3. Create an item with a canonical identifier
+defarm items new \
+  --value-chain BEEF \
+  --year 2026 \
+  --country BR \
+  --circuit-id <circuit-id> \
+  --metadata '{"sisbov":"105500497219983","breed":"Nelore"}'
+
+# 4. Add an event
+defarm events add \
+  --event-type item_weighed \
+  --item-id <item-id> \
+  --circuit-id <circuit-id> \
+  --payload '{"weight_kg":520}'
+```
+
+## Demo Account
+
+For testing access, request credentials via [gabriel@defarm.net](mailto:gabriel@defarm.net).
+
+## Documentation
+
+Full docs: [docs.defarm.net](https://docs.defarm.net)
+
+## Gateway
+
+Production: [gateway.defarm.net](https://gateway.defarm.net)
+
+## Local Workspace
 
 ```bash
 npm install
@@ -25,17 +65,6 @@ npm run build
 npm test
 ```
 
-## Layout
+## License
 
-```text
-tooling/
-  packages/
-    sdk/
-    cli/
-```
-
-## Notes
-
-- `engines` remains the private product/backend repository.
-- This repo exists to present and evolve the public tooling code separately.
-- npm publishing can continue from `engines` for now, then move here later if desired.
+MIT
