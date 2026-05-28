@@ -99,14 +99,16 @@ partner can only disclose data from their own circuits.
 ## SCF #40 Build Award
 
 This tooling is part of DeFarm's SCF #40 Build Award deliverables
-(Tranches 2 and 3). On-chain evidence (Stellar mainnet as of 2026-05-28):
+(Tranches 2 and 3).
 
-- 3,336 anchor records
-- 1,749 confirmed by the listener
-- 805 NFT mints
-
-SCF Build Award receiving wallet:
-<https://stellar.expert/explorer/public/account/GCS5KMW6HBKAVPY3B7SFVFX2DUQIXDADHIMIHGDMU43ZKRYYWGQT2KXN>
+- **M2 demo video:** <https://youtu.be/3Plp8qwnn5k> (terminal walkthrough
+  of the seven M2 deliverables running live against the production gateway).
+- On-chain evidence (Stellar mainnet as of 2026-05-28):
+  - 3,336 anchor records
+  - 1,749 confirmed by the listener
+  - 805 NFT mints
+- SCF Build Award receiving wallet:
+  <https://stellar.expert/explorer/public/account/GCS5KMW6HBKAVPY3B7SFVFX2DUQIXDADHIMIHGDMU43ZKRYYWGQT2KXN>
 
 ## Local workspace
 
