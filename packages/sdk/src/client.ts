@@ -35,13 +35,31 @@ export class DefarmHttpClient {
       headers["x-api-key"] = this.apiKey;
     }
 
-    const response = await undiciRequest(url, {
-      method,
-      headers,
-      body: body == null ? undefined : JSON.stringify(body),
-      headersTimeout: this.config.timeoutMs,
-      bodyTimeout: this.config.timeoutMs,
-    });
+    let response;
+    try {
+      response = await undiciRequest(url, {
+        method,
+        headers,
+        body: body == null ? undefined : JSON.stringify(body),
+        headersTimeout: this.config.timeoutMs,
+        bodyTimeout: this.config.timeoutMs,
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (
+        msg.includes('Headers Timeout') ||
+        msg.includes('Body Timeout') ||
+        msg.includes('UND_ERR_HEADERS_TIMEOUT') ||
+        msg.includes('UND_ERR_BODY_TIMEOUT')
+      ) {
+        throw new Error(
+          `Request to ${url} timed out after ${this.config.timeoutMs}ms. ` +
+          `Check if the gateway is reachable and the service is healthy.`
+        );
+      }
+      // Enrich other transport errors with URL context
+      throw new Error(`Request to ${url} failed: ${msg}`);
+    }
 
     const text = await response.body.text();
     const parsed = text ? safeJsonParse(text) : null;

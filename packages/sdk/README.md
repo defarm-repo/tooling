@@ -1,8 +1,8 @@
 # @defarm/sdk
 
-TypeScript SDK for integrating with the DeFarm gateway API.
+SDK TypeScript para integração com a API da DeFarm via gateway.
 
-## Install
+## Instalação
 
 ```bash
 npm install @defarm/sdk
@@ -14,7 +14,7 @@ npm install @defarm/sdk
 import { DefarmSdk } from "@defarm/sdk";
 
 const sdk = new DefarmSdk({ gatewayBaseUrl: "https://gateway.defarm.net" });
-const auth = await sdk.auth.login("user@example.com", "password");
+const auth = await sdk.auth.login("email", "senha");
 sdk.setAccessToken(auth.access_token);
 
 const circuits = await sdk.circuits.list();
@@ -31,7 +31,7 @@ const receipts = await sdk.receipts.list({ receipt_type: "disclosure" });
 console.log(receipts.length);
 ```
 
-## API key authentication
+## Autenticação por API key (parceiro)
 
 ```ts
 import { DefarmSdk } from "@defarm/sdk";
@@ -51,7 +51,7 @@ console.log(circuits);
 npm test
 ```
 
-## Publish
+## Publicação no npm
 
 ```bash
 npm publish --access public

@@ -15,7 +15,7 @@ function startMockServer() {
         refresh_token: 'tok-refresh',
         user: {
           id: 'u1',
-          email: 'partner@example.com',
+          email: 'partner@defarm.net',
           workspace: {
             id: 'w1',
             name: 'Partner WS',
@@ -35,7 +35,7 @@ function startMockServer() {
         refresh_token: 'tok-refresh-2',
         user: {
           id: 'u1',
-          email: 'partner@example.com',
+          email: 'partner@defarm.net',
           workspace: {
             id: 'w1',
             name: 'Partner WS',
@@ -53,7 +53,7 @@ function startMockServer() {
       }
       return json(res, 200, {
         id: 'u1',
-          email: 'partner@example.com',
+        email: 'partner@defarm.net',
         workspace: {
           id: 'w1',
           name: 'Partner WS',
@@ -203,12 +203,12 @@ test('SDK acceptance: auth/workspace/circuits/items/events', async () => {
 
   const sdk = new DefarmSdk({ gatewayBaseUrl: base });
 
-  const login = await sdk.auth.login('partner@example.com', 'secret');
+  const login = await sdk.auth.login('partner@defarm.net', 'secret');
   assert.equal(login.user.workspace.workspace_type, 'partner');
   sdk.setAccessToken(login.access_token);
 
   const me = await sdk.auth.whoami();
-  assert.equal(me.email, 'partner@example.com');
+  assert.equal(me.email, 'partner@defarm.net');
 
   const refreshed = await sdk.auth.refresh('tok-refresh');
   assert.equal(refreshed.access_token, 'tok-access-2');
@@ -251,7 +251,7 @@ test('SDK acceptance: auth/workspace/circuits/items/events', async () => {
   const event = await sdk.events.show('e1');
   assert.equal(event.id, 'e1');
 
-  const eventAdded = await sdk.events.add({ event_type: 'item_vaccinated', source_type: 'partner', source_id: 'demo-source', circuit_id: 'c1', item_id: 'i1', payload: { vaccine: 'aftosa' } });
+  const eventAdded = await sdk.events.add({ event_type: 'item_vaccinated', source_type: 'partner', source_id: 'cowpro', circuit_id: 'c1', item_id: 'i1', payload: { vaccine: 'aftosa' } });
   assert.equal(eventAdded.id, 'e2');
 
   const eventUpdated = await sdk.events.update('e2', { status: 'recorded' });
@@ -291,9 +291,9 @@ test('SDK supports API key authentication header', async () => {
   const addr = server.address();
   const base = `http://127.0.0.1:${addr.port}`;
 
-  const sdk = new DefarmSdk({ gatewayBaseUrl: base, apiKey: 'demo-api-key-1' });
+  const sdk = new DefarmSdk({ gatewayBaseUrl: base, apiKey: 'partner-api-key-1' });
   const me = await sdk.auth.whoami();
-  assert.equal(me.email, 'partner@example.com');
+  assert.equal(me.email, 'partner@defarm.net');
 
   server.close();
 });

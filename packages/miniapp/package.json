@@ -1,12 +1,12 @@
 {
-  "name": "@defarm/cli",
-  "version": "0.1.11",
-  "description": "DeFarm CLI",
+  "name": "@defarm/miniapp",
+  "version": "0.1.0",
+  "description": "Framework for building standalone applications on top of the DeFarm platform",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/defarm-repo/tooling.git",
-    "directory": "packages/cli"
+    "directory": "packages/miniapp"
   },
   "homepage": "https://defarm.net",
   "bugs": {
@@ -16,13 +16,13 @@
     "defarm",
     "traceability",
     "agri",
-    "cli",
-    "stellar"
+    "stellar",
+    "miniapp",
+    "tokenization"
   ],
   "type": "module",
-  "bin": {
-    "defarm": "dist/index.js"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -32,17 +32,14 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "dev": "tsx src/index.ts",
-    "test": "DEFARM_SKIP_UPDATE_CHECK=1 npm run build && node --test test/*.test.mjs",
+    "test": "npm run build && node --test test/*.test.mjs",
     "prepublishOnly": "npm run check && npm run test"
   },
   "dependencies": {
-    "@defarm/sdk": "^0.1.6",
-    "commander": "^12.1.0"
+    "@defarm/sdk": "^0.1.6"
   },
   "devDependencies": {
     "@types/node": "^22.8.2",
-    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
 }

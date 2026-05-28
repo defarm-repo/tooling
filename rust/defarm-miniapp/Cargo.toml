@@ -1,0 +1,20 @@
+[package]
+name = "defarm-miniapp"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Framework for building DeFarm miniapps in Rust on top of defarm-sdk"
+repository = "https://github.com/defarm-repo/tooling"
+homepage = "https://defarm.net"
+documentation = "https://docs.rs/defarm-miniapp"
+keywords = ["defarm", "miniapp", "stellar", "tokenization", "marketplace"]
+categories = ["api-bindings"]
+readme = "README.md"
+
+[dependencies]
+defarm-sdk = { version = "0.1", path = "../defarm-sdk" }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+
+[workspace]
+members = ["examples/tokenization", "examples/marketplace"]

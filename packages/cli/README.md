@@ -1,14 +1,14 @@
 # @defarm/cli
 
-CLI for common DeFarm gateway operations.
+CLI da DeFarm para operações de Tranche 1 (auth/workspace/circuits/items/events).
 
-## Install
+## Instalação (npm)
 
 ```bash
 npx @defarm/cli --help
 ```
 
-or install globally:
+ou instalação global:
 
 ```bash
 npm install -g @defarm/cli
@@ -19,28 +19,28 @@ defarm --help
 
 ```bash
 defarm workspace init --gateway https://gateway.defarm.net
-defarm auth login --email <email> --password <password>
+defarm auth login --email <email> --password <senha>
 defarm auth whoami
 defarm circuits list
 defarm items list --circuit <circuit_id>
 
-# or API key authentication
+# ou autenticação por API key
 defarm auth api-key --key <api_key>
 defarm circuits list
 
-# JSON output for scripts
+# saída JSON para automação
 defarm circuits list --json
 ```
 
-## Local development
+## Desenvolvimento local
 
 ```bash
-npm install
-npm run build
-node packages/cli/dist/index.js --help
+cd tooling/defarm-sdk && npm install && npm run build
+cd ../defarm-cli && npm install && npm run build
+node dist/index.js --help
 ```
 
-## Commands
+## Comandos
 
 - `auth`: `login`, `api-key`, `logout`, `whoami`, `refresh`
 - `workspace`: `init`, `status`, `config`, `reset`
@@ -50,10 +50,10 @@ node packages/cli/dist/index.js --help
 - `disclosures`: `create`
 - `receipts`: `list`, `show`
 
-## Output format
+## Formato de saída
 
-- Human-readable output by default.
-- Use `--json` for script integration.
+- Por padrão, a CLI usa saída humana (tabelas/resumo + links web quando aplicável).
+- Para integração em scripts, use `--json`.
 
 ## Testes
 
@@ -61,9 +61,9 @@ node packages/cli/dist/index.js --help
 npm test
 ```
 
-## Publish
+## Publicação no npm
 
-Publish `@defarm/sdk` before `@defarm/cli`.
+Publicar primeiro `@defarm/sdk`, depois `@defarm/cli`.
 
 ```bash
 npm publish --access public

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import { createRequire } from "node:module";
 import { authCommands } from "./commands/auth.js";
 import { workspaceCommands } from "./commands/workspace.js";
 import { circuitsCommands } from "./commands/circuits.js";
@@ -9,7 +10,8 @@ import { disclosuresCommands } from "./commands/disclosures.js";
 import { receiptsCommands } from "./commands/receipts.js";
 import { notifyIfUpdateAvailable } from "./update-check.js";
 
-const CLI_VERSION = "0.1.10";
+const require = createRequire(import.meta.url);
+const { version: CLI_VERSION } = require("../package.json") as { version: string };
 
 const program = new Command();
 program

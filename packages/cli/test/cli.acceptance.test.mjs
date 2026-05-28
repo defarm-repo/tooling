@@ -18,11 +18,11 @@ function startMockServer() {
         refresh_token: 'cli-refresh',
         user: {
           id: 'u1',
-          email: 'partner@example.com',
+          email: 'qa.partner.2026@defarm.net',
           workspace: {
             id: 'w1',
-            name: 'Partner Demo',
-            slug: 'partner-demo',
+            name: 'Partner QA',
+            slug: 'partner-qa',
             workspace_type: 'partner',
             role: 'owner',
           },
@@ -36,11 +36,11 @@ function startMockServer() {
         refresh_token: 'cli-refresh-2',
         user: {
           id: 'u1',
-          email: 'partner@example.com',
+          email: 'qa.partner.2026@defarm.net',
           workspace: {
             id: 'w1',
-            name: 'Partner Demo',
-            slug: 'partner-demo',
+            name: 'Partner QA',
+            slug: 'partner-qa',
             workspace_type: 'partner',
             role: 'owner',
           },
@@ -54,11 +54,11 @@ function startMockServer() {
       }
       return json(res, 200, {
         id: 'u1',
-        email: 'partner@example.com',
+        email: 'qa.partner.2026@defarm.net',
         workspace: {
           id: 'w1',
-          name: 'Partner Demo',
-          slug: 'partner-demo',
+          name: 'Partner QA',
+          slug: 'partner-qa',
           workspace_type: 'partner',
           role: 'owner',
         },
@@ -71,14 +71,14 @@ function startMockServer() {
 
     if (req.method === 'GET' && url.pathname === '/api/circuits') {
       return json(res, 200, {
-        circuits: [{ id: 'c1', name: 'Demo Circuit', visibility: 'public', status: 'active' }],
+        circuits: [{ id: 'c1', name: 'CowPro', visibility: 'public', status: 'active' }],
       });
     }
 
     if (req.method === 'GET' && url.pathname === '/api/circuits/c1') {
       return json(res, 200, {
         id: 'c1',
-        name: 'Demo Circuit',
+        name: 'CowPro',
         visibility: 'public',
         status: 'active',
       });
@@ -243,7 +243,7 @@ test('CLI acceptance: auth/workspace/circuits/items/events', async () => {
   const steps = [
     ['workspace', 'init', '--gateway', base],
     ['workspace', 'config', '--gateway', base],
-    ['auth', 'login', '--email', 'partner@example.com', '--password', 'secret'],
+    ['auth', 'login', '--email', 'qa.partner.2026@defarm.net', '--password', 'secret'],
     ['auth', 'whoami'],
     ['auth', 'refresh'],
     ['workspace', 'status'],
@@ -256,7 +256,7 @@ test('CLI acceptance: auth/workspace/circuits/items/events', async () => {
     ['items', 'update', 'i2', '--circuit-id', 'c1', '--metadata', '{"status":"updated"}'],
     ['events', 'list', '--circuit', 'c1'],
     ['events', 'show', 'e1'],
-    ['events', 'add', '--event-type', 'item_vaccinated', '--source-type', 'partner', '--source-id', 'demo-source', '--circuit-id', 'c1', '--item-id', 'i1', '--payload', '{"dose":1}'],
+    ['events', 'add', '--event-type', 'item_vaccinated', '--source-type', 'partner', '--source-id', 'cowpro', '--circuit-id', 'c1', '--item-id', 'i1', '--payload', '{"dose":1}'],
     ['events', 'add', '--event-type', 'item_weighed', '--circuit-id', 'c1', '--item-id', 'i1', '--payload', '{"weight_kg":520}'],
     ['events', 'update', 'e2', '--status', 'recorded'],
   ];
@@ -279,7 +279,7 @@ test('CLI acceptance: auth/workspace/circuits/items/events', async () => {
 
   const finalSteps = [
     ['auth', 'logout'],
-    ['auth', 'api-key', '--key', 'demo-api-key-1'],
+    ['auth', 'api-key', '--key', 'partner-api-key-1'],
     ['auth', 'whoami'],
     ['workspace', 'reset'],
   ];

@@ -1,8 +1,17 @@
 {
   "name": "@defarm/sdk",
-  "version": "0.1.5",
-  "description": "TypeScript SDK for DeFarm gateway integrations",
+  "version": "0.1.6",
+  "description": "DeFarm SDK for CLI and partner integrations",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/defarm-repo/tooling.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://defarm.net",
+  "bugs": {
+    "url": "https://github.com/defarm-repo/tooling/issues"
+  },
   "keywords": [
     "defarm",
     "traceability",
