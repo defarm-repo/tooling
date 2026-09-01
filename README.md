@@ -35,6 +35,17 @@ is open here.
 | `defarm-miniapp/examples/tokenization` | — | Axum server exposing `GET /token/:dfid` with a fresh provenance disclosure |
 | `defarm-miniapp/examples/marketplace` | — | Axum server exposing `GET /listings` with finance disclosures attached |
 
+### Snapshot schemas (`schemas/`)
+
+Versioned JSON Schemas for the signed item snapshot that a token's on-chain
+anchor points to, plus a validator — so a reader can check a snapshot's shape
+by its own `schema_version`, without trusting DeFarm. See
+[`schemas/`](schemas). Validate any live token:
+
+```bash
+cd schemas && npm install && node validate.mjs DFID-DEFARM-BR-2026-009474-86b7f8
+```
+
 ## Quick start (TypeScript)
 
 ```bash

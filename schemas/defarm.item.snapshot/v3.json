@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://defarm.net/schemas/defarm.item.snapshot/v3.json",
+  "title": "DeFarm item snapshot (v3)",
+  "description": "The signed, IPFS-pinned snapshot that a DeFarm item's on-chain anchor points to. This schema describes schema_version 3.x. It is intentionally lenient at the object level (additionalProperties allowed) so a backward-compatible 3.y minor can add fields without breaking readers; the required set is the shape a reader can depend on. Sensitive identifiers appear only as HMAC commitments, never as raw values.",
+  "type": "object",
+  "required": ["schema", "schema_version", "identity", "provenance", "events", "signature"],
+  "properties": {
+    "schema": { "const": "defarm.item.snapshot" },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^3\\.[0-9]+\\.[0-9]+$",
+      "description": "Semantic version of this snapshot shape. This schema validates the 3.x line."
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "identity": {
+      "type": "object",
+      "required": ["dfid", "value_chain", "country", "year", "status"],
+      "properties": {
+        "dfid": {
+          "type": "string",
+          "pattern": "^DFID-[A-Z]+-[A-Z]{2}-[0-9]{4}-[0-9]{6}-[a-f0-9]{6}$"
+        },
+        "value_chain": { "type": "string" },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "year": { "type": "integer" },
+        "status": { "type": "string" },
+        "canonical_identifiers": { "type": "array" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Item attributes. Partner-supplied fields vary, so additional properties are allowed. Note weight_kg is a string. Sensitive identifiers (SISBOV, CAR) never appear raw here — only as *_commitment objects.",
+      "properties": {
+        "birth_date": { "type": "string" },
+        "breed": { "type": "string" },
+        "sex": { "type": "string" },
+        "category": { "type": "string" },
+        "weight_kg": { "type": "string" },
+        "data_pesagem": { "type": "string" },
+        "value_chain": { "type": "string" },
+        "country": { "type": "string" },
+        "year": { "type": "string" },
+        "sisbov_commitment": { "$ref": "#/$defs/commitment" },
+        "car_commitment": { "$ref": "#/$defs/commitment" }
+      }
+    },
+    "property": {
+      "type": "object",
+      "properties": {
+        "car_commitment": { "$ref": "#/$defs/commitment" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["registered_at"],
+      "properties": {
+        "previous_cid": {
+          "type": ["string", "null"],
+          "description": "CID of the previous snapshot in this item's chain, or null for the genesis snapshot. Walk this backwards to reconstruct state history from IPFS alone."
+        },
+        "registered_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      }
+    },
+    "sanity": {
+      "type": "object",
+      "description": "Aggregate summary as of this snapshot. last_weight_* reflect the most recent weighing by business date (occurred_at). null where no such event exists.",
+      "properties": {
+        "total_events": { "type": "integer", "minimum": 0 },
+        "weighings": { "type": "integer", "minimum": 0 },
+        "movements": { "type": "integer", "minimum": 0 },
+        "vaccinations": { "type": "integer", "minimum": 0 },
+        "treatments": { "type": "integer", "minimum": 0 },
+        "last_weight_kg": { "type": ["number", "null"] },
+        "last_weight_date": { "type": ["string", "null"] },
+        "last_vaccine": { "type": ["string", "null"] }
+      }
+    },
+    "events": {
+      "type": "object",
+      "description": "An integrity commitment over the item's events — NOT the events themselves. The raw per-event history is available through the DeFarm API, not on IPFS.",
+      "required": ["algorithm", "count", "hash"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "count": { "type": "integer", "minimum": 0 },
+        "description": { "type": "string" },
+        "hash": { "type": "string", "pattern": "^[a-f0-9]+$" }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Ed25519 authorship over the snapshot. The signing recipe is carried in `spec`; verify locally against `public_key`.",
+      "required": ["algorithm", "public_key", "signed_document", "value"],
+      "properties": {
+        "algorithm": { "type": "string" },
+        "domain": { "type": "string" },
+        "public_key": { "type": "string" },
+        "signed_at": { "type": "string" },
+        "signed_document": { "type": "string" },
+        "spec": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "technical": {
+      "type": "object",
+      "properties": {
+        "adapters": { "type": "array", "items": { "type": "string" } },
+        "publisher": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "commitment": {
+      "type": "object",
+      "description": "A privacy-preserving HMAC commitment to a sensitive value. You can check equality against a known input; the raw value is never present.",
+      "required": ["alg", "value"],
+      "properties": {
+        "alg": { "type": "string" },
+        "domain": { "type": "string" },
+        "value": { "type": "string", "pattern": "^[a-f0-9]+$" },
+        "version": { "type": "string" }
+      }
+    }
+  }
+}
