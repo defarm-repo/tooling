@@ -69,7 +69,24 @@ const server = createServer(async (req, res) => {
     return;
   }
   const dfid = match[1];
-  const rancherShare = Math.min(Math.max(Number(url.searchParams.get("split") ?? 0.5), 0), 1);
+
+  // split is the rancher's share of the GAIN (0..1). Validate it instead of
+  // silently coercing: "abc" must not become a 200 with null numbers, and 5 or
+  // -1 must not be silently clamped.
+  const splitParam = url.searchParams.get("split");
+  let rancherShare = 0.5;
+  if (splitParam !== null) {
+    const n = Number(splitParam);
+    if (!Number.isFinite(n) || n < 0 || n > 1) {
+      send(400, {
+        error: "invalid_split",
+        got: splitParam,
+        hint: "split must be a number between 0 and 1 (the rancher's share of the gain)",
+      });
+      return;
+    }
+    rancherShare = n;
+  }
 
   try {
     const items = await app.items.list({ circuitId: await resolveCircuitId() });

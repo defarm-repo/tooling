@@ -39,10 +39,31 @@ const esc = (s: unknown) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string)
   );
 
+// Keys a shopper shouldn't see: envelope noise, the DFID (already the header),
+// and internal identifiers. `id` is the internal item UUID — never on a public page.
+const HIDDEN_KEYS = new Set(["audience", "preset", "generated_at", "dfid", "id"]);
+
+/** Flatten one level of nesting into clean scalar rows, deduped, no internal ids. */
+function flatten(fields: Record<string, unknown>): Record<string, string> {
+  const out: Record<string, string> = {};
+  const add = (k: string, v: unknown) => {
+    if (HIDDEN_KEYS.has(k) || v === null || v === undefined || v === "") return;
+    if (typeof v === "object") return; // skip deeper nesting; scalars only
+    if (!(k in out)) out[k] = String(v); // first occurrence wins (dedupe)
+  };
+  for (const [k, v] of Object.entries(fields)) {
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      for (const [ck, cv] of Object.entries(v as Record<string, unknown>)) add(ck, cv);
+    } else {
+      add(k, v);
+    }
+  }
+  return out;
+}
+
 function page(dfid: string, fields: Record<string, unknown>, verifyUrl: string): string {
-  const rows = Object.entries(fields)
-    .filter(([k]) => !["audience", "preset", "generated_at"].includes(k))
-    .map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</td></tr>`)
+  const rows = Object.entries(flatten(fields))
+    .map(([k, v]) => `<tr><td>${esc(k.replace(/_/g, " "))}</td><td>${esc(v)}</td></tr>`)
     .join("");
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -85,6 +106,10 @@ const server = createServer(async (req, res) => {
     const fields = disclosure.disclosed_payload as Record<string, unknown>;
 
     if (asJson) {
+      // Strip the internal item UUID before it leaves the building.
+      if (fields.item && typeof fields.item === "object") {
+        delete (fields.item as Record<string, unknown>).id;
+      }
       res.writeHead(200, { "content-type": "application/json" });
       res.end(JSON.stringify({ dfid, public_fields: fields, receipt_id: disclosure.receipt_id, verify_yourself: verifyUrl }, null, 2));
     } else {

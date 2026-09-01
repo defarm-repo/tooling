@@ -38,7 +38,7 @@ interface Signals {
   weighings: number;
   gain_kg: number | null;
   avg_daily_gain_kg: number | null;
-  monotonic_gain: boolean;
+  monotonic_gain: boolean | null;
   movements: number;
   movements_with_gta: number;
   on_chain_anchor: boolean;
@@ -85,7 +85,9 @@ const server = createServer(async (req, res) => {
 
     let gainKg: number | null = null;
     let adg: number | null = null;
-    let monotonic = true;
+    // An empty series is vacuously monotonic — but presenting that as a positive
+    // signal to a lender is misleading, so with fewer than two weighings it's n/a.
+    let monotonic: boolean | null = weighings.length >= 2 ? true : null;
     if (weighings.length >= 2) {
       gainKg = weighings[weighings.length - 1].kg - weighings[0].kg;
       const days =
@@ -114,11 +116,13 @@ const server = createServer(async (req, res) => {
     // A transparent, non-binding signal. NOT a credit decision.
     const positives =
       Number(signals.weighings >= 2) +
-      Number(signals.monotonic_gain) +
+      Number(signals.monotonic_gain === true) +
       Number((signals.avg_daily_gain_kg ?? 0) >= 0.3) +
       Number(signals.on_chain_anchor) +
       Number(signals.movements === signals.movements_with_gta);
-    const band = positives >= 4 ? "strong" : positives >= 2 ? "fair" : "insufficient_data";
+    // Without a real weight history there is no basis for a band at all.
+    const band =
+      signals.weighings < 2 ? "insufficient_data" : positives >= 4 ? "strong" : positives >= 2 ? "fair" : "insufficient_data";
 
     send(200, {
       dfid,

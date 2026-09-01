@@ -19,9 +19,13 @@ const GATEWAY = process.env.DEFARM_GATEWAY ?? "https://gateway.defarm.net";
 const PORT = Number(process.env.PORT ?? 3004);
 // Stellar's own public infrastructure — NOT DeFarm.
 const HORIZON = "https://horizon.stellar.org";
+// Several independent public IPFS gateways. We only need ONE to resolve the CID:
+// the content address is the proof, whichever gateway serves it. They are tried
+// in order and the first that returns the bytes wins. (cloudflare-ipfs.com was
+// shut down by Cloudflare and is intentionally omitted.)
 const IPFS_GATEWAYS = [
+  "https://gateway.pinata.cloud/ipfs/",
   "https://ipfs.io/ipfs/",
-  "https://cloudflare-ipfs.com/ipfs/",
   "https://dweb.link/ipfs/",
 ];
 
@@ -77,14 +81,24 @@ const server = createServer(async (req, res) => {
 
   try {
     // Step 1: DeFarm's public claim (no auth needed to read it).
-    const verify = await fetch(`${GATEWAY}/v1/verify/${dfid}`).then((r) => (r.ok ? r.json() : null));
+    const verifyRes = await fetch(`${GATEWAY}/v1/verify/${dfid}`);
+    if (verifyRes.status === 404) {
+      // Distinguish "no such DFID" from "DFID exists but isn't anchored yet".
+      send(404, {
+        error: "dfid_not_found",
+        dfid,
+        note: "DeFarm's public verify endpoint has no record of this DFID.",
+      });
+      return;
+    }
+    const verify = verifyRes.ok ? await verifyRes.json() : null;
     const anchor = verify?.anchor;
     if (!anchor?.transaction_hash) {
       send(200, {
         dfid,
         defarm_claim: anchor ?? null,
         verdict: "no_anchor_to_check",
-        note: "DeFarm reports no confirmed on-chain anchor for this DFID yet.",
+        note: "This DFID exists but has no confirmed on-chain anchor yet.",
       });
       return;
     }
