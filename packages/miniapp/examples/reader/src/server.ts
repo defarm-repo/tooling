@@ -298,5 +298,5 @@ function sourceNote(cid: string, gateway: string, txHash?: string): Json {
 
 server.listen(PORT, () => {
   console.log(`sovereign reader listening on http://localhost:${PORT}  (no DeFarm API key)`);
-  console.log(`try:  curl http://localhost:${PORT}/read/DFID-DEFARM-BR-2026-009471-bbcbbe`);
+  console.log(`try:  curl http://localhost:${PORT}/read/DFID-DEFARM-BR-2026-009474-86b7f8`);
 });

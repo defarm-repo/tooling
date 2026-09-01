@@ -64,7 +64,7 @@ npm start          # no DEFARM_API_KEY needed
 Then:
 
 ```bash
-curl http://localhost:3007/read/DFID-DEFARM-BR-2026-009471-bbcbbe
+curl http://localhost:3007/read/DFID-DEFARM-BR-2026-009474-86b7f8
 ```
 
 You'll get the identity, current state, event summary, commitments, the local
