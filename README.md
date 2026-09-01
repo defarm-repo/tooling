@@ -24,6 +24,7 @@ is open here.
 | `packages/miniapp/examples/verifier` | — | [source](packages/miniapp/examples/verifier) | **Runnable** TS server: `GET /verify/:dfid` — confirms the anchor on Stellar Horizon + IPFS, not via DeFarm |
 | `packages/miniapp/examples/provenance` | — | [source](packages/miniapp/examples/provenance) | **Runnable** TS server: `GET /p/:dfid` — consumer farm-to-fork page from a public disclosure |
 | `packages/miniapp/examples/notifier` | — | [source](packages/miniapp/examples/notifier) | **Runnable** TS server: polls receipts and posts new ones to a webhook (Slack/Telegram-style) |
+| `packages/miniapp/examples/reader` | none (public infra) | [source](packages/miniapp/examples/reader) | **Runnable** TS server: `GET /read/:dfid` — reads a token's content from IPFS + Stellar with **no API key**, re-verifies Ed25519 locally |
 
 ### Rust (`rust/`)
 
