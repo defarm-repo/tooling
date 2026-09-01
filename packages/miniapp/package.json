@@ -1,6 +1,6 @@
 {
   "name": "@defarm/miniapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework for building standalone applications on top of the DeFarm platform",
   "license": "MIT",
   "repository": {

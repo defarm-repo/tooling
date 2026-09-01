@@ -75,7 +75,11 @@ class ItemHelpers {
           value_chain: "BEEF",
           country,
           year,
-          metadata: { sisbov: params.sisbov, ...(params.metadata ?? {}) },
+          // The ingestion resolver reads identifiers and attributes from the
+          // row's top level (CSV-column semantics) — not from a nested
+          // metadata object. Nesting them silently failed the identifier gate.
+          sisbov: params.sisbov,
+          ...(params.metadata ?? {}),
         },
       ],
     });

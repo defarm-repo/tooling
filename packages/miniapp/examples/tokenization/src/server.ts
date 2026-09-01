@@ -13,9 +13,9 @@ import { createServer } from "node:http";
 import { DefarmMiniapp, DefarmMiniappError } from "@defarm/miniapp";
 
 const GATEWAY = process.env.DEFARM_GATEWAY ?? "https://gateway.defarm.net";
-// Default: the DeFarm sandbox circuit used for reviewer access.
-const CIRCUIT_ID =
-  process.env.DEFARM_CIRCUIT_ID ?? "aad49a5c-cc5b-4daa-bb95-d969e5765c21";
+// Circuit: explicit via DEFARM_CIRCUIT_ID, otherwise auto-discovered from
+// the API key (first circuit the key can see).
+let CIRCUIT_ID = process.env.DEFARM_CIRCUIT_ID ?? "";
 const PORT = Number(process.env.PORT ?? 3000);
 
 if (!process.env.DEFARM_API_KEY) {
@@ -28,6 +28,17 @@ const app = new DefarmMiniapp({
   gateway: GATEWAY,
   apiKey: process.env.DEFARM_API_KEY,
 });
+
+async function resolveCircuitId(): Promise<string> {
+  if (CIRCUIT_ID) return CIRCUIT_ID;
+  const circuits = await app.sdk.circuits.list();
+  if (circuits.length === 0) {
+    throw new Error("This API key sees no circuits. Set DEFARM_CIRCUIT_ID explicitly.");
+  }
+  CIRCUIT_ID = circuits[0].id;
+  console.log(`circuit auto-discovered from key: ${circuits[0].name} (${CIRCUIT_ID})`);
+  return CIRCUIT_ID;
+}
 
 interface PublicAnchor {
   status?: string;
@@ -63,7 +74,7 @@ const server = createServer(async (req, res) => {
   const dfid = match[1];
 
   try {
-    const items = await app.items.list({ circuitId: CIRCUIT_ID });
+    const items = await app.items.list({ circuitId: await resolveCircuitId() });
     const item = items.find((i) => i.dfid === dfid);
     if (!item) {
       send(404, { error: "dfid_not_in_circuit", dfid, circuit_id: CIRCUIT_ID });
@@ -99,9 +110,10 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, async () => {
+  try { await resolveCircuitId(); } catch (e) { console.error((e as Error).message); }
   console.log(`tokenization miniapp listening on http://localhost:${PORT}`);
   try {
-    const items = await app.items.list({ circuitId: CIRCUIT_ID });
+    const items = await app.items.list({ circuitId: await resolveCircuitId() });
     const sample = items.find((i) => i.dfid.includes("-BEEF-")) ?? items[0];
     if (sample) {
       console.log(`try:  curl http://localhost:${PORT}/token/${sample.dfid}`);

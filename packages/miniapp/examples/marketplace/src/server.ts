@@ -13,9 +13,9 @@ import { DefarmMiniapp, DefarmMiniappError } from "@defarm/miniapp";
 import type { DisclosureResponse } from "@defarm/sdk";
 
 const GATEWAY = process.env.DEFARM_GATEWAY ?? "https://gateway.defarm.net";
-// Default: the DeFarm sandbox circuit used for reviewer access.
-const CIRCUIT_ID =
-  process.env.DEFARM_CIRCUIT_ID ?? "aad49a5c-cc5b-4daa-bb95-d969e5765c21";
+// Circuit: explicit via DEFARM_CIRCUIT_ID, otherwise auto-discovered from
+// the API key (first circuit the key can see).
+let CIRCUIT_ID = process.env.DEFARM_CIRCUIT_ID ?? "";
 const PORT = Number(process.env.PORT ?? 3001);
 const LISTING_COUNT = 3; // keep the demo footprint small
 
@@ -29,6 +29,17 @@ const app = new DefarmMiniapp({
   gateway: GATEWAY,
   apiKey: process.env.DEFARM_API_KEY,
 });
+
+async function resolveCircuitId(): Promise<string> {
+  if (CIRCUIT_ID) return CIRCUIT_ID;
+  const circuits = await app.sdk.circuits.list();
+  if (circuits.length === 0) {
+    throw new Error("This API key sees no circuits. Set DEFARM_CIRCUIT_ID explicitly.");
+  }
+  CIRCUIT_ID = circuits[0].id;
+  console.log(`circuit auto-discovered from key: ${circuits[0].name} (${CIRCUIT_ID})`);
+  return CIRCUIT_ID;
+}
 
 // One disclosure per item per run: cache so repeated requests don't re-issue.
 const disclosureCache = new Map<string, DisclosureResponse>();
@@ -54,7 +65,7 @@ const server = createServer(async (req, res) => {
   }
 
   try {
-    const items = await app.items.list({ circuitId: CIRCUIT_ID });
+    const items = await app.items.list({ circuitId: await resolveCircuitId() });
     const beef = items.filter((i) => i.value_chain === "BEEF" && i.status === "active");
     const picked = (beef.length >= LISTING_COUNT ? beef : items).slice(0, LISTING_COUNT);
 
@@ -91,7 +102,8 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
+  try { await resolveCircuitId(); } catch (e) { console.error((e as Error).message); }
   console.log(`marketplace miniapp listening on http://localhost:${PORT}`);
   console.log(`try:  curl http://localhost:${PORT}/listings`);
 });
