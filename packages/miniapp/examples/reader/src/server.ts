@@ -54,11 +54,11 @@ type Json = Record<string, unknown>;
 const b64url = (s: string): Uint8Array => new Uint8Array(Buffer.from(s, "base64url"));
 
 /** Fetch a JSON object for a CID, trying each public gateway in turn. */
-async function fetchIpfs(cid: string): Promise<{ json: Json; gateway: string } | null> {
+async function fetchIpfs(cid: string, timeoutMs = 8000): Promise<{ json: Json; gateway: string } | null> {
   for (const gw of IPFS_GATEWAYS) {
     try {
       const c = new AbortController();
-      const t = setTimeout(() => c.abort(), 8000);
+      const t = setTimeout(() => c.abort(), timeoutMs);
       const r = await fetch(`${gw}${cid}`, { signal: c.signal });
       clearTimeout(t);
       if (r.ok) return { json: (await r.json()) as Json, gateway: gw };
@@ -126,7 +126,10 @@ async function walkHistory(startCid: string): Promise<Json[]> {
   let cid: string | null = startCid;
   for (let i = 0; i < 25 && cid && !seen.has(cid); i++) {
     seen.add(cid);
-    const got: { json: Json; gateway: string } | null = await fetchIpfs(cid);
+    // The history walk is secondary and can wait: a cold IPFS fetch of an older
+    // CID sometimes takes >8s, so give each gateway more room here than on the
+    // main read, to avoid sub-reporting a hop that would have resolved.
+    const got: { json: Json; gateway: string } | null = await fetchIpfs(cid, 15000);
     if (!got) {
       history.push({ cid, resolved: false });
       break;
