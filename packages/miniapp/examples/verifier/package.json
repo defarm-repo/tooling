@@ -1,0 +1,20 @@
+{
+  "name": "@defarm/example-verifier",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Runnable example: independent verifier \u2014 confirms a DFID's anchor directly against Stellar Horizon and IPFS, without trusting DeFarm's gateway.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@defarm/miniapp": "^0.1.1",
+    "@defarm/sdk": "^0.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

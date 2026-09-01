@@ -1,0 +1,19 @@
+{
+  "name": "@defarm/example-provenance",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Runnable example: consumer provenance viewer \u2014 a public_basic disclosure rendered as a simple farm-to-fork page anyone can open.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@defarm/miniapp": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}

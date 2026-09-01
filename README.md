@@ -16,9 +16,14 @@ is open here.
 | --- | ---: | --- | --- |
 | `@defarm/sdk` | `0.2.1` | <https://www.npmjs.com/package/@defarm/sdk> | TypeScript SDK for the DeFarm gateway (0.2.x adds the sealed-envelope line) |
 | `@defarm/cli` | `0.1.11` | <https://www.npmjs.com/package/@defarm/cli> | CLI built on top of the SDK (circuits, items, receipts, disclosures) |
-| `@defarm/miniapp` | `0.1.0` | <https://www.npmjs.com/package/@defarm/miniapp> | Framework for building standalone DeFarm miniapps |
+| `@defarm/miniapp` | `0.1.1` | <https://www.npmjs.com/package/@defarm/miniapp> | Framework for building standalone DeFarm miniapps |
 | `packages/miniapp/examples/tokenization` | — | [source](packages/miniapp/examples/tokenization) | **Runnable** TS server: `GET /token/:dfid` with provenance disclosure + on-chain anchor |
 | `packages/miniapp/examples/marketplace` | — | [source](packages/miniapp/examples/marketplace) | **Runnable** TS server: `GET /listings` with finance disclosures buyers can verify |
+| `packages/miniapp/examples/partnership` | — | [source](packages/miniapp/examples/partnership) | **Runnable** TS server: `GET /partnership/:dfid` — livestock partnership split from verified weighings |
+| `packages/miniapp/examples/credit-precheck` | — | [source](packages/miniapp/examples/credit-precheck) | **Runnable** TS server: `GET /credit/:dfid` — finance disclosure + transparent risk signal for a lender |
+| `packages/miniapp/examples/verifier` | — | [source](packages/miniapp/examples/verifier) | **Runnable** TS server: `GET /verify/:dfid` — confirms the anchor on Stellar Horizon + IPFS, not via DeFarm |
+| `packages/miniapp/examples/provenance` | — | [source](packages/miniapp/examples/provenance) | **Runnable** TS server: `GET /p/:dfid` — consumer farm-to-fork page from a public disclosure |
+| `packages/miniapp/examples/notifier` | — | [source](packages/miniapp/examples/notifier) | **Runnable** TS server: polls receipts and posts new ones to a webhook (Slack/Telegram-style) |
 
 ### Rust (`rust/`)
 

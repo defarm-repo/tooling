@@ -1,0 +1,20 @@
+{
+  "name": "@defarm/example-partnership",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Runnable example: livestock partnership tracker \u2014 entry vs current weight, weight gain, and the arroba split between the investing partner and the rancher.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@defarm/miniapp": "^0.1.1",
+    "@defarm/sdk": "^0.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0"
+  }
+}
