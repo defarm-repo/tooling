@@ -14,9 +14,11 @@ is open here.
 
 | Package | Version | npm | Description |
 | --- | ---: | --- | --- |
-| `@defarm/sdk` | `0.1.6` | <https://www.npmjs.com/package/@defarm/sdk> | TypeScript SDK for the DeFarm gateway |
-| `@defarm/cli` | `0.1.11` | <https://www.npmjs.com/package/@defarm/cli> | CLI built on top of the SDK |
+| `@defarm/sdk` | `0.2.1` | <https://www.npmjs.com/package/@defarm/sdk> | TypeScript SDK for the DeFarm gateway (0.2.x adds the sealed-envelope line) |
+| `@defarm/cli` | `0.1.11` | <https://www.npmjs.com/package/@defarm/cli> | CLI built on top of the SDK (circuits, items, receipts, disclosures) |
 | `@defarm/miniapp` | `0.1.0` | <https://www.npmjs.com/package/@defarm/miniapp> | Framework for building standalone DeFarm miniapps |
+| `packages/miniapp/examples/tokenization` | — | [source](packages/miniapp/examples/tokenization) | **Runnable** TS server: `GET /token/:dfid` with provenance disclosure + on-chain anchor |
+| `packages/miniapp/examples/marketplace` | — | [source](packages/miniapp/examples/marketplace) | **Runnable** TS server: `GET /listings` with finance disclosures buyers can verify |
 
 ### Rust (`rust/`)
 
@@ -66,7 +68,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-Two runnable example miniapps live under `rust/defarm-miniapp/examples/`.
+Runnable example miniapps ship in **both stacks**: TypeScript under
+[`packages/miniapp/examples/`](packages/miniapp/examples) (each is a full
+project — `npm install && DEFARM_API_KEY=... npm start`) and Rust under
+`rust/defarm-miniapp/examples/`.
 
 ## Selective disclosure presets
 

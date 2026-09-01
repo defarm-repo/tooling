@@ -22,3 +22,4 @@ present on the item), the disclosure receipt (`receipt_id` + `proof_hash`) and a
 public `verify_yourself` URL that needs no authentication.
 
 Optional env: `DEFARM_GATEWAY`, `DEFARM_CIRCUIT_ID`, `PORT` (see `.env.example`).
+If port 3001 is taken on your machine (`EADDRINUSE`), run with `PORT=3101 npm start`.
