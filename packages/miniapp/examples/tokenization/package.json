@@ -1,0 +1,19 @@
+{
+  "name": "@defarm/example-tokenization",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Runnable example: turn a verified DeFarm item into a tokenized representation with an auditable disclosure and its on-chain anchor.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@defarm/miniapp": "^0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  }
+}
