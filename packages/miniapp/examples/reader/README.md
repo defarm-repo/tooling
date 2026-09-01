@@ -35,6 +35,17 @@ the key-holding examples (`partnership`, `credit-precheck`) fetch from the API.
 
 This reader is the public, zero-trust floor. The API examples build on top of it.
 
+## A point in time, on purpose
+
+The numbers here come from the **anchored snapshot** — a photograph taken when
+the token was last sealed on-chain (see `summary.as_of`). If you run
+`partnership` or `credit-precheck` (which read the *live* API) and this reader
+side by side, the reader may show fewer events: those examples see what exists
+today, this one sees what was cryptographically sealed. That gap isn't a bug —
+it's the whole demonstration. Immutability has a cost: what's sealed is what was
+sealed, until the next re-anchoring. A server can change its mind; a sealed
+snapshot can't.
+
 ## Schema awareness
 
 The snapshot is self-describing (`schema` + `schema_version`). This reader is

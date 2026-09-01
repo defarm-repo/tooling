@@ -233,6 +233,7 @@ const server = createServer(async (req, res) => {
     const sanity = (snap.sanity ?? {}) as Json;
     const property = (snap.property ?? {}) as Json;
     const events = (snap.events ?? {}) as Json;
+    const prov = (snap.provenance ?? {}) as Json;
 
     send(200, {
       dfid,
@@ -254,6 +255,8 @@ const server = createServer(async (req, res) => {
         category: meta.category,
       },
       summary: {
+        as_of: prov.registered_at,
+        note: "Counts and weights are as of the anchor time (as_of) — a point-in-time snapshot of what was sealed on-chain. The live API (and the key-holding examples in this folder) may show newer events that haven't been re-anchored yet. That gap is the point: this reader shows what is provably sealed, not what a server claims today.",
         total_events: sanity.total_events,
         weighings: sanity.weighings,
         movements: sanity.movements,
