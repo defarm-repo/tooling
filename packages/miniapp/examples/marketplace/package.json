@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@defarm/miniapp": "^0.1.0",
+    "@defarm/miniapp": "^0.1.1",
     "@defarm/sdk": "^0.1.6"
   },
   "devDependencies": {
