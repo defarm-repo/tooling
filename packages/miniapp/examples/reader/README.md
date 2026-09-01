@@ -38,7 +38,8 @@ This reader is the public, zero-trust floor. The API examples build on top of it
 ## A point in time, on purpose
 
 The numbers here come from the **anchored snapshot** — a photograph taken when
-the token was last sealed on-chain (see `summary.as_of`). If you run
+the token was last sealed on-chain (see `summary.sealed_at`, and
+`summary.index_flags_newer_events` when the live API has moved ahead). If you run
 `partnership` or `credit-precheck` (which read the *live* API) and this reader
 side by side, the reader may show fewer events: those examples see what exists
 today, this one sees what was cryptographically sealed. That gap isn't a bug —

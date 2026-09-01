@@ -167,6 +167,7 @@ const server = createServer(async (req, res) => {
     }
     const idx = idxRes.ok ? ((await idxRes.json()) as Json) : null;
     const anchor = (idx?.anchor ?? {}) as Json;
+    const freshness = (idx?.content_freshness ?? {}) as Json;
     const cid = anchor.metadata_cid as string | undefined;
     const txHash = anchor.transaction_hash as string | undefined;
     if (!cid) {
@@ -233,7 +234,6 @@ const server = createServer(async (req, res) => {
     const sanity = (snap.sanity ?? {}) as Json;
     const property = (snap.property ?? {}) as Json;
     const events = (snap.events ?? {}) as Json;
-    const prov = (snap.provenance ?? {}) as Json;
 
     send(200, {
       dfid,
@@ -255,8 +255,9 @@ const server = createServer(async (req, res) => {
         category: meta.category,
       },
       summary: {
-        as_of: prov.registered_at,
-        note: "Counts and weights are as of the anchor time (as_of) — a point-in-time snapshot of what was sealed on-chain. The live API (and the key-holding examples in this folder) may show newer events that haven't been re-anchored yet. That gap is the point: this reader shows what is provably sealed, not what a server claims today.",
+        sealed_at: freshness.latest_content_anchor_confirmed_at ?? null,
+        index_flags_newer_events: freshness.stale ?? null,
+        note: "Counts and weights are as of sealed_at — when this snapshot was anchored on-chain. If index_flags_newer_events is true, the live API has events created after the seal that aren't in this snapshot yet. That gap is the point: this reader shows what is provably sealed, not what a server claims today.",
         total_events: sanity.total_events,
         weighings: sanity.weighings,
         movements: sanity.movements,
