@@ -60,11 +60,27 @@ npm run dev
 
 ## Examples
 
-- [`examples/tokenization`](./examples/tokenization/README.md) — turn a
-  verified BEEF item into a tokenized representation usable by downstream
-  finance systems.
-- [`examples/marketplace`](./examples/marketplace/README.md) — list DFIDs
-  available for sale with disclosures attached for buyer verification.
+Eight **runnable** examples live under [`examples/`](./examples/) — each is a full
+project, not a snippet. Run any of them with three commands:
+
+```bash
+cd examples/<name>
+npm install
+DEFARM_API_KEY=<your partner key> npm start   # the reader needs no key
+```
+
+They read verified traceability data from the live DeFarm gateway.
+
+| Example | What it does |
+| --- | --- |
+| [`tokenization`](./examples/tokenization) | `GET /token/:dfid` — a verified item's identity + an audit disclosure + its on-chain anchor |
+| [`marketplace`](./examples/marketplace) | `GET /listings` — items for sale with finance disclosures a buyer can verify |
+| [`partnership`](./examples/partnership) | `GET /partnership/:dfid` — the livestock partnership split, computed from verified weighing events |
+| [`credit-precheck`](./examples/credit-precheck) | `GET /credit/:dfid` — a lender's finance disclosure plus a transparent risk signal from the animal's history |
+| [`verifier`](./examples/verifier) | `GET /verify/:dfid` — confirms the anchor independently on Stellar Horizon + IPFS, not via DeFarm |
+| [`provenance`](./examples/provenance) | `GET /p/:dfid` — a consumer farm-to-fork page from a public disclosure |
+| [`reader`](./examples/reader) | `GET /read/:dfid` — reads a token's content from IPFS + Stellar with **no API key**, re-verifying Ed25519 locally |
+| [`notifier`](./examples/notifier) | watches the receipts feed and posts new receipts to a webhook (Slack/Telegram-style) |
 
 ## License
 
